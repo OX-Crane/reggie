@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/reggie?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: root
+
+mybatis-plus:
+  configuration:
+#    \u5728\u6620\u5C04\u5B9E\u4F53\u6216\u8005\u5C5E\u6027\u65F6\uFF0C\u5C06\u6570\u636E\u5E93\u4E2D\u8868\u540D\u548C\u5B57\u6BB5\u540D\u4E2D\u7684\u4E0B\u5212\u7EBF\u53BB\u6389\u6309\u7167\u9A7C\u5CF0\u547D\u540D\u6CD5\u6620\u5C04
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      table-prefix:
+      id-type: assign_id
+
