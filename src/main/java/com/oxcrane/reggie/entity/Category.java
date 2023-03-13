@@ -8,44 +8,50 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 员工实体
- * Serializable对象序列化用的
+ * 分类
  */
 @Data
-public class Employee implements Serializable {
+public class Category implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    private String username;
 
+    //类型 1 菜品分类 2 套餐分类
+    private Integer type;
+
+
+    //分类名称
     private String name;
 
-    private String password;
 
-    private String phone;
+    //顺序
+    private Integer sort;
 
-    private String sex;
 
-//    身份证号
-    private String idNumber;
-
-    private Integer status;
-
-//    插入时自动填充
+    //创建时间
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-//    插入和更新时自动填充
+
+    //更新时间
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
-//    插入时自动填充
+
+    //创建人
     @TableField(fill = FieldFill.INSERT)
     private Long createUser;
-//    插入和更新时自动填充
+
+
+    //修改人
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateUser;
 
+
+    //是否删除, @TableField(select = false)查询时不显示
+    @TableField(select = false)
+    private Integer isDeleted;
 
 }

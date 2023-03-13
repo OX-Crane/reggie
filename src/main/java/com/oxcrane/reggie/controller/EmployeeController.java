@@ -5,16 +5,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.oxcrane.reggie.common.R;
 import com.oxcrane.reggie.entity.Employee;
 import com.oxcrane.reggie.service.EmployeeService;
-import com.oxcrane.reggie.service.impl.EmployeeServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -76,13 +73,13 @@ public class EmployeeController {
 //        设置初始密码为123456，但需要md5加密
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
 
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
 
-        Long empId= (Long) request.getSession().getAttribute("employee");
+//        Long empId= (Long) request.getSession().getAttribute("employee");
 
-        employee.setCreateUser(empId);
-        employee.setUpdateUser(empId);
+//        employee.setCreateUser(empId);
+//        employee.setUpdateUser(empId);
 
         employeeService.save(employee);
 
@@ -91,6 +88,16 @@ public class EmployeeController {
 
     /**
      * 员工信息分页查询
+     *
+     * Page<T> pageInfo = new Page<>(page, pageSize);
+     * LambdaQueryWrapper<T> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+     * 添加分页条件
+     * lambdaQueryWrapper.like(StringUtils.isNotEmpty(参数),T::getxx(),xx);
+     * lambdaQueryWrapper.orderByDesc(参数)
+     * 查询
+     * categoryService.page(pageInfo,lambdaQueryWrapper);
+     * return R.success(pageInfo);
+     *
      * @param page
      * @param pageSize
      * @param name
@@ -115,22 +122,26 @@ public class EmployeeController {
     }
 
     /**
-     * 员工登录
+     * 员工更新
      * @param employee
      * @return
      */
     @PutMapping
     public R<String> update(HttpServletRequest request, @RequestBody Employee employee){
+
+        Long threadId = Thread.currentThread().getId();
+        log.info("更新UPDATE线程Id为{}",threadId);
+
         log.info(employee.toString());
 
 //        获取当修改用户的id
-        Long empId = (Long) request.getSession().getAttribute("employee");
+//        Long empId = (Long) request.getSession().getAttribute("employee");
 
 //        设置修改用户的id
-        employee.setUpdateUser(empId);
+//        employee.setUpdateUser(empId);
 
 //        设置更新的时间
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
 
         employeeService.updateById(employee);
 

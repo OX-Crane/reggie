@@ -1,6 +1,7 @@
 package com.oxcrane.reggie.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.oxcrane.reggie.common.BaseContext;
 import com.oxcrane.reggie.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -19,6 +20,10 @@ public class LoginCheckFilter implements Filter {
     public static final AntPathMatcher PathMatcher = new AntPathMatcher();
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
+        Long threadId = Thread.currentThread().getId();
+        log.info("拦截器线程Id为" + threadId);
+
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
@@ -43,9 +48,10 @@ public class LoginCheckFilter implements Filter {
             return;
         }
 //        4、判断登录状态、如已登陆，则直接放行
-        Object employee = request.getSession().getAttribute("employee");
-        if (employee != null){
-            log.info("用户已登陆,用户id:{}",employee);
+        Long employeeId = (Long) request.getSession().getAttribute("employee");
+        if (employeeId != null){
+            log.info("用户已登陆,用户id:{}",employeeId);
+            BaseContext.setCurrentId(employeeId);
             filterChain.doFilter(request, response);
             return;
         }

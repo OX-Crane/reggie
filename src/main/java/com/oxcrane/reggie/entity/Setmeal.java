@@ -5,47 +5,64 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 员工实体
- * Serializable对象序列化用的
+ * 套餐
  */
 @Data
-public class Employee implements Serializable {
+public class Setmeal implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    private String username;
 
+    //分类id
+    private Long categoryId;
+
+
+    //套餐名称
     private String name;
 
-    private String password;
 
-    private String phone;
+    //套餐价格
+    private BigDecimal price;
 
-    private String sex;
 
-//    身份证号
-    private String idNumber;
-
+    //状态 0:停用 1:启用
     private Integer status;
 
-//    插入时自动填充
+
+    //编码
+    private String code;
+
+
+    //描述信息
+    private String description;
+
+
+    //图片
+    private String image;
+
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-//    插入和更新时自动填充
+
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
-//    插入时自动填充
+
     @TableField(fill = FieldFill.INSERT)
     private Long createUser;
-//    插入和更新时自动填充
+
+
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateUser;
 
 
+    //是否删除
+    private Integer isDeleted;
 }
