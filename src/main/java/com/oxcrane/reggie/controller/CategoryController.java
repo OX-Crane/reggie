@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 分类管理
  */
@@ -50,10 +52,9 @@ public class CategoryController {
      * @return
      */
     @DeleteMapping
-    public R<String> delete(String ids){
+    public R<String> delete(String ids) {
         log.info("要删除的菜品id为{}",ids);
         Long id = Long.valueOf(ids);
-
         categoryService.remove(id);
 //        categoryService.removeById(Long.valueOf(ids));
         return R.success("删除成功");
@@ -75,7 +76,7 @@ public class CategoryController {
      * @return
      */
     @GetMapping("/page")
-    public R<Page> page(int page, int pageSize){
+    public R<Page> page(int page, int pageSize) {
         log.info("菜品分页,当前页码{},页面大小{}",page,pageSize);
 //        构造分页构造器
         Page<Category> pageInfo = new Page<>(page, pageSize);
@@ -87,6 +88,20 @@ public class CategoryController {
         categoryService.page(pageInfo,lambdaQueryWrapper);
 
         return R.success(pageInfo);
+    }
+
+    @GetMapping("list")
+    public R<List<Category>> list(Category category) {
+//        条件构造器
+        LambdaQueryWrapper<Category> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+//        添加条件
+        lambdaQueryWrapper.eq(category.getType() != null, Category::getType, category.getType());
+//        添加排序条件
+        lambdaQueryWrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
+
+        List<Category> list = categoryService.list(lambdaQueryWrapper);
+
+        return R.success(list);
     }
 
 
