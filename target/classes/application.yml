@@ -22,3 +22,9 @@ mybatis-plus:
 reggie:
   path: D:\img\
 
+#阿里云短信服务
+sms:
+  signName: 阿里云短信测试
+  templateCode: SMS_154950909
+
+

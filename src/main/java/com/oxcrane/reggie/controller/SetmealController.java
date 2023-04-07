@@ -98,4 +98,42 @@ public class SetmealController {
         return R.success("删除成功");
     }
 
+    /**
+     * 更新套餐的起售和停售的状态
+     * @param status
+     * @param ids
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    public R<String> updateStatus(@PathVariable Long status,@RequestParam(value = "ids") List<Long> ids) {
+        log.info("status:{},ids:{}",status,ids);
+        setmealService.updateStatus(status, ids);
+        return R.success("更新成功");
+    }
+
+    /**
+     * 回显数据
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public R<SetmealDto> get(@PathVariable Long id) {
+        log.info("回显套餐的id{}",id);
+        SetmealDto setmealDto = setmealService.get(id);
+        return R.success(setmealDto);
+    }
+
+    /**
+     * 更新套餐
+     * @param setmealDto
+     * @return
+     */
+    @PutMapping
+    public R<String> update(@RequestBody SetmealDto setmealDto) {
+        log.info("接收到的数据{}", setmealDto);
+        setmealService.updateSetmeal(setmealDto);
+        return R.success("更新成功");
+    }
+
+
 }

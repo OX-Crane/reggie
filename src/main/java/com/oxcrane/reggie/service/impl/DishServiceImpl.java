@@ -1,7 +1,10 @@
 package com.oxcrane.reggie.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.oxcrane.reggie.common.CustomException;
 import com.oxcrane.reggie.dto.DishDto;
 import com.oxcrane.reggie.entity.Dish;
 import com.oxcrane.reggie.entity.DishFlavor;
@@ -95,5 +98,59 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
         }).collect(Collectors.toList());
 
         dishFlavorService.saveBatch(flavors);
+    }
+
+    /**
+     * 停售和起售菜品 修改dish表status字段
+     * @param ids
+     */
+    @Override
+    public void updateStatus(Long status,List<Long> ids) {
+//        构造条件生成器
+        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(ids != null, Dish::getId, ids);
+
+        List<Dish> dishes = this.list(queryWrapper);
+
+        for (Dish i: dishes) {
+//        修改菜品的状态
+            i.setStatus(status.intValue());
+        }
+//        保存菜品
+        this.updateBatchById(dishes);
+    }
+
+    /**
+     * 删除菜品
+     * @param ids
+     */
+    @Override
+    @Transactional
+    public void deleteDish(List<Long> ids) {
+//        构造条件构造器
+        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
+
+        queryWrapper.in(ids != null, Dish::getId, ids);
+        queryWrapper.eq(Dish::getStatus, 1);
+
+        long count = this.count(queryWrapper);
+
+        if (count > 0) {
+            throw new CustomException("菜品正在售卖，请先停止起售");
+        }
+
+//        删除菜品的口味
+        LambdaQueryWrapper<DishFlavor> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.in(DishFlavor::getDishId,ids);
+
+
+        List<DishFlavor> list = dishFlavorService.list(lambdaQueryWrapper);
+
+        for (DishFlavor i: list) {
+            dishFlavorService.removeById(i.getId());
+        }
+
+        this.removeBatchByIds(ids);
+
     }
 }
