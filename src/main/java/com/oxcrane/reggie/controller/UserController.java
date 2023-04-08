@@ -50,7 +50,7 @@ public class UserController {
             String code = ValidateCodeUtils.generateValidateCode(4).toString();
             log.info("验证码为:{}",code);
             //        调用阿里云提供短信服务的api发送短信
-            SMSUtils.sendMessage(signName,templateCode,phone,code);
+//            SMSUtils.sendMessage(signName,templateCode,phone,code);
             //        需要将生成的验证码保存起来Session
 //            手机号作为key，验证码为code
             session.setAttribute(phone,code);

@@ -23,7 +23,7 @@ public class SMSUtils {
 	 * @param param 参数
 	 */
 	public static void sendMessage(String signName, String templateCode,String phoneNumbers,String param){
-		DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "accessKeyId","secret");
+		DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "accessKeyId", "secret");
 		/** use STS Token
 		 DefaultProfile profile = DefaultProfile.getProfile(
 		 "<your-region-id>",           // The region ID

@@ -135,5 +135,26 @@ public class SetmealController {
         return R.success("更新成功");
     }
 
+    /**
+     * 获取套餐信息
+     * @param setmeal
+     * @return
+     */
+    @GetMapping("/list")
+    public R<List<Setmeal>> list(Setmeal setmeal) {
+        log.info("套餐信息:{}",setmeal);
+
+        LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
+
+        queryWrapper.eq(setmeal.getCategoryId() != null,Setmeal::getCategoryId,setmeal.getCategoryId());
+        queryWrapper.eq(setmeal.getStatus() != null, Setmeal::getStatus, setmeal.getStatus());
+        queryWrapper.orderByDesc(Setmeal::getUpdateTime);
+
+        List<Setmeal> setMeals = setmealService.list(queryWrapper);
+
+        return R.success(setMeals);
+    }
+
+
 
 }

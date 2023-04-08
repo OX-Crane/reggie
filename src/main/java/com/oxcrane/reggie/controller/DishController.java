@@ -6,6 +6,7 @@ import com.oxcrane.reggie.common.R;
 import com.oxcrane.reggie.dto.DishDto;
 import com.oxcrane.reggie.entity.Category;
 import com.oxcrane.reggie.entity.Dish;
+import com.oxcrane.reggie.entity.DishFlavor;
 import com.oxcrane.reggie.service.CategoryService;
 import com.oxcrane.reggie.service.DishFlavorService;
 import com.oxcrane.reggie.service.DishService;
@@ -128,7 +129,7 @@ public class DishController {
      * @return
      */
     @GetMapping("/list")
-    public R<List<Dish>> list(Dish dish) {
+    public R<List<DishDto>> list(Dish dish) {
 
 //        构建条件查询器
         LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
@@ -141,8 +142,35 @@ public class DishController {
 
         List<Dish> list = dishService.list(queryWrapper);
 
-        return R.success(list);
+        List<DishDto> dtoList = list.stream().map((item) ->{
+            DishDto dishDto = new DishDto();
+            BeanUtils.copyProperties(item, dishDto);
+
+            dishDto.setFlavors(dishFlavorService.list(new LambdaQueryWrapper<DishFlavor>().eq(DishFlavor::getDishId,item.getId())));
+
+            dishDto.setCategoryName(categoryService.getOne(new LambdaQueryWrapper<Category>().eq(Category::getId,item.getCategoryId())).getName());
+
+            return dishDto;
+        }).collect(Collectors.toList());
+
+        return R.success(dtoList);
     }
+//    @GetMapping("/list")
+//    public R<List<Dish>> list(Dish dish) {
+//
+////        构建条件查询器
+//        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
+//
+////        添加条件
+//        queryWrapper.eq(dish.getCategoryId() != null, Dish::getCategoryId, dish.getCategoryId());
+////        正在售卖的
+//        queryWrapper.eq(Dish::getStatus, 1);
+//        queryWrapper.orderByAsc(Dish::getSort).orderByDesc(Dish::getUpdateTime);
+//
+//        List<Dish> list = dishService.list(queryWrapper);
+//
+//        return R.success(list);
+//    }
 
     /**
      * 停售和起售
