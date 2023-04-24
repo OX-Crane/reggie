@@ -1,36 +1,39 @@
 package com.oxcrane.reggie.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
- * 购物车
+ * 订单明细
  */
 @Data
-public class ShoppingCart implements Serializable {
+public class OrderDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    //套餐名称或菜品名称
+    //名称
     private String name;
 
-    //用户id
-    private Long userId;
+    //订单id
+    private Long orderId;
+
 
     //菜品id
     private Long dishId;
 
+
     //套餐id
     private Long setmealId;
 
+
     //口味
     private String dishFlavor;
+
 
     //数量
     private Integer number;
@@ -40,6 +43,4 @@ public class ShoppingCart implements Serializable {
 
     //图片
     private String image;
-
-    private LocalDateTime createTime;
 }
